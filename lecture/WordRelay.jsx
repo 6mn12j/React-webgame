@@ -1,6 +1,7 @@
 const React = require('react');
 const { Component } = React;
 
+//hooks로 바꿀때 state를 useState로
 class WordRelay extends Component {
   state = {
     word: '시작',
