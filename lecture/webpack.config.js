@@ -1,30 +1,46 @@
 const path = require('path');
-const webpack = require('webpack');
-module.exports = {
-  name: 'word-relay-setting',
-  mode: 'development', //실서비스:production
-  devtool: 'eval',
-  resolve: {
-    extensions: ['.js', 'jsx'],
-  },
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+module.exports = {
+  name: 'word-relay-dev',
+  mode: 'development',
+  devtool: 'inline-source-map',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   entry: {
-    app: ['./client'],
-  }, //입력
+    app: './client',
+  },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
-          //  plugins: ['@babel/plugin-proposal-class-properties'],
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: { browsers: ['last 2 chrome versions'] },
+                debug: true,
+              },
+            ],
+            '@babel/preset-react',
+          ],
+          plugins: ['@babel/plugin-proposal-class-properties', 'react-refresh/babel'],
         },
+        exclude: path.join(__dirname, 'node_modules'),
       },
     ],
   },
+  plugins: [new ReactRefreshWebpackPlugin()],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'app.js',
-  }, //출력
+    filename: '[name].js',
+    publicPath: '/dist',
+  },
+  devServer: {
+    publicPath: '/dist',
+    hot: true,
+  },
 };
