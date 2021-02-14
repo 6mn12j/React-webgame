@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -6,6 +7,7 @@ module.exports = {
   resolve: {
     extensions: ['.jsx', '.js'],
   },
+
   entry: {
     app: './client',
   },
@@ -15,12 +17,24 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  browsers: ['> 5% in KR'], //browserslist
+                },
+                debug: true,
+              },
+            ],
+            '@babel/preset-react',
+          ],
           plugins: [],
         },
       },
     ],
   },
+  plugins: [new webpack.LoaderOptionsPlugin({ debug: true })],
   output: {
     filename: 'app.js',
     path: path.join(__dirname, 'dist'),
