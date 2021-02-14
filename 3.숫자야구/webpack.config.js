@@ -37,7 +37,6 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'app.js',
-    publicPath: '/dist',
   },
   devServer: {
     publicPath: '/dist',

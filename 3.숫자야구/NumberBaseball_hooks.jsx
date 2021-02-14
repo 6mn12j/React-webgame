@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import Try from './Try';
+import React, { useState, useRef, memo } from 'react';
+import Try from './Try_hooks';
 
 function getNumbers() {
   const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -11,20 +11,22 @@ function getNumbers() {
   return array;
 }
 
-const NumberBaseball = () => {
+const NumberBaseball = memo(() => {
+  console.log('hooks');
   const [result, setResult] = useState('');
   const [value, setValue] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState(getNumbers());
   const [tries, setTries] = useState([]);
+  const inputEl = useRef(null);
+
   const onSubmitForm = (e) => {
     e.preventDefault();
     console.log(answer);
     if (value === answer.join('')) {
-      setResult('홈런!');
       setTries((prevTries) => {
         return [...prevTries, { try: value, result: '홈런!' }];
       });
-
+      setResult('홈런!');
       alert('정답입니다. 게임을 다시 시작합니다.');
       setAnswer(getNumbers());
       setTries([]);
@@ -39,6 +41,7 @@ const NumberBaseball = () => {
         setValue('');
         setAnswer(getNumbers());
         setTries([]);
+        inputEl.current.focus();
       } else {
         for (let i = 0; i < 4; i++) {
           if (answerArray[i] === answer[i]) {
@@ -49,6 +52,7 @@ const NumberBaseball = () => {
         }
         setTries((prevTries) => [...prevTries, { try: value, result: `${strike} 스트라이크 ${ball}볼 입니다.` }]);
         setValue('');
+        inputEl.current.focus();
       }
     }
   };
@@ -59,7 +63,7 @@ const NumberBaseball = () => {
     <>
       <h1>{result}</h1>
       <form onSubmit={onSubmitForm}>
-        <input maxLength={4} value={value} onChange={onChangeInput} placeholder="4자리 숫자를 맞춰보세요" />
+        <input ref={inputEl} maxLength={4} value={value} onChange={onChangeInput} placeholder="4자리 숫자를 맞춰보세요" />
       </form>
       <div>
         시도:{tries.length}
@@ -71,6 +75,6 @@ const NumberBaseball = () => {
       </div>
     </>
   );
-};
+});
 
 export default NumberBaseball;

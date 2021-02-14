@@ -1,4 +1,4 @@
-import React, { createRef, Component } from 'react';
+import React, { pureComponent, createRef } from 'react';
 import Try from './Try';
 
 function getNumbers() {
@@ -11,7 +11,7 @@ function getNumbers() {
   return array;
 }
 
-class NumberBaseball extends Component {
+class NumberBaseball extends pureComponent {
   state = {
     result: '',
     value: '',
@@ -31,6 +31,7 @@ class NumberBaseball extends Component {
         answer: getNumbers(),
         tries: [],
       });
+      this.inputRef.current.focus();
     } else {
       const answerArray = value.split('').map((value) => parseInt(value));
       let strike = 0;
@@ -45,6 +46,7 @@ class NumberBaseball extends Component {
           answer: getNumbers(),
           tries: [],
         });
+        this.inputRef.current.focus();
       } else {
         for (let i = 0; i < 4; i++) {
           if (answerArray[i] === answer[i]) {
@@ -56,6 +58,7 @@ class NumberBaseball extends Component {
         this.setState((prevState) => {
           return { tries: [...prevState.tries, { try: value, result: `${strike} 스트라이크 ${ball}볼 입니다.` }], value: '' };
         });
+        this.inputRef.current.focus();
       }
     }
   };
@@ -64,14 +67,16 @@ class NumberBaseball extends Component {
       value: e.target.value,
     });
   };
-  inputRef = createRef(); //this.inputRef
+
+  inputRef = createRef();
+
   render() {
     const { result, value, tries } = this.state;
     return (
       <>
         <h1>{result}</h1>
         <form onSubmit={this.onSubmitForm}>
-          <input maxLength={4} value={value} onChange={this.onChangeInput} placeholder="4자리 숫자를 맞춰보세요" />
+          <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput} placeholder="4자리 숫자를 맞춰보세요" />
         </form>
         <div>
           시도:{tries.length}

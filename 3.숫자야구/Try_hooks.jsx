@@ -1,11 +1,11 @@
-import React from 'react';
-const Try = ({ tryInfo }) => {
+import React, { memo } from 'react';
+const Try = memo(({ tryInfo }) => {
   return (
     <li>
-      <div>{ptryInfo.try}</div>
+      <div>{tryInfo.try}</div>
       <div>{tryInfo.result}</div>
     </li>
   );
-};
+});
 
 export default Try;
