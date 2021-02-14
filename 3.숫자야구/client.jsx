@@ -1,7 +1,6 @@
 const React = require('react');
 const ReactDom = require('react-dom');
-const { default: NumberBaseball } = require('./NumberBaseball');
 
-constNumberBaseball = require('./NumberBaseball');
+const NumberBaseball = require('./NumberBaseball');
 
 ReactDom.render(<NumberBaseball />, document.querySelector('#root'));

@@ -1,6 +1,4 @@
-const React = require('react');
-const { Component } = React;
-import { createRef } from 'react';
+import React, { createRef, Component } from 'react';
 import Try from './Try';
 
 function getNumbers() {
@@ -24,7 +22,7 @@ class NumberBaseball extends Component {
     const { value, answer, tries } = this.state;
     e.preventDefault();
     console.log(answer);
-    if (this.state.value === this.state.answer.join('')) {
+    if (value === answer.join('')) {
       this.setState((prevState) => {
         return { result: '홈런!', tries: [...prevState.tries, { try: value, result: '홈런!' }] };
       });
@@ -56,7 +54,7 @@ class NumberBaseball extends Component {
           }
         }
         this.setState((prevState) => {
-          return { tries: [...prevState.tries, { try: value, result: `${strike} 스트라이크 ${ball}볼 입니다.` }], value: e.target.value };
+          return { tries: [...prevState.tries, { try: value, result: `${strike} 스트라이크 ${ball}볼 입니다.` }], value: '' };
         });
       }
     }
@@ -66,7 +64,7 @@ class NumberBaseball extends Component {
       value: e.target.value,
     });
   };
-
+  inputRef = createRef(); //this.inputRef
   render() {
     const { result, value, tries } = this.state;
     return (
@@ -79,7 +77,7 @@ class NumberBaseball extends Component {
           시도:{tries.length}
           <ul>
             {tries.map((value, index) => {
-              return <Try key={`${index - 1}차 시도:`} tryInfo={value} />;
+              return <Try key={`${index + 1}차 시도:`} tryInfo={value} />;
             })}
           </ul>
         </div>
