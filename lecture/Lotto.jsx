@@ -23,8 +23,8 @@ class Lotto extends Component {
     redo: false,
   };
 
-  timeouts = [];
-  componentDidMount() {
+  runTimeoutes = () => {
+    console.log('runTimeout');
     const { winNumbers } = this.state;
     for (let i = 0; i < winNumbers.length - 1; i++) {
       this.timeouts[i] = setTimeout(() => {
@@ -39,13 +39,40 @@ class Lotto extends Component {
         redo: true,
       });
     }, 7000);
+  };
+
+  timeouts = [];
+  componentDidMount() {
+    this.runTimeoutes();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('didUpdate');
+    const { winBalls } = this.state;
+    //state(setState)가 바뀔때마다 실행되므로 조건문이 중요.
+    if (winBalls.length === 0) {
+      this.runTimeoutes();
+    }
   }
 
   componentWillUnmount() {
+    console.log('willUnmount');
     this.timeouts.forEach((v) => {
       clearTimeout(v);
     });
   }
+
+  onClickRedo = () => {
+    console.log('onClickRedo');
+    //초기화
+    this.setState({
+      winNumbers: getWinNumbers(), // 당첨 숫자들
+      winBalls: [],
+      bonus: null, // 보너스 공
+      redo: false,
+    });
+    this.timeouts = [];
+  };
   render() {
     const { winBalls, bonus, redo } = this.state;
     return (
@@ -59,7 +86,7 @@ class Lotto extends Component {
           </div>
           <div>보너스!</div>
           {bonus && <Ball number={bonus} />}
-          <button onClick={redo ? onClickRedo : () => {}}>한번 더 !</button>
+          {redo && <button onClick={this.onClickRedo}>한번 더 !</button>}
         </div>
       </>
     );
